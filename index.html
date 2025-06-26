@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金流量系统演示平台</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease 0.3s both;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .link-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-item:hover::after {
+            width: 6px;
+            background: var(--accent-color);
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(67, 97, 238, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .link-item:hover .link-icon {
+            background: rgba(67, 97, 238, 0.2);
+            transform: scale(1.1);
+        }
+
+        .link-content {
+            flex: 1;
+        }
+
+        .link-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+        }
+
+        .link-desc {
+            font-size: 0.85rem;
+            color: #666;
+            opacity: 0;
+            height: 0;
+            transition: var(--transition);
+        }
+
+        .link-item:hover .link-desc {
+            opacity: 1;
+            height: auto;
+        }
+
+        .link-arrow {
+            color: #ccc;
+            transition: var(--transition);
+            margin-left: 10px;
+        }
+
+        .link-item:hover .link-arrow {
+            color: var(--primary-color);
+            transform: translateX(3px);
+        }
+
+        .login-demo {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease 0.5s both;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .login-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-title i {
+            margin-right: 8px;
+        }
+
+        .login-info {
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .login-info-item {
+            margin-bottom: 8px;
+            display: flex;
+        }
+
+        .login-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .login-label {
+            font-weight: 500;
+            min-width: 80px;
+            color: var(--dark-color);
+        }
+
+        .login-value {
+            color: var(--primary-color);
+            word-break: break-all;
+            text-decoration: none;
+        }
+
+        .login-tip {
+            font-size: 0.85rem;
+            color: #ff6b6b;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.85rem;
+            animation: fadeIn 1s ease 0.7s both;
+        }
+
+        /* iframe样式 */
+        #iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: none;
+        }
+
+        #iframe-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #iframe-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 加载动画 */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(67, 97, 238, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 点击波纹效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* 去除a标签默认样式 */
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- iframe容器 -->
+    <div id="iframe-container">
+        <div id="iframe-close">×</div>
+        <iframe id="iframe-content"></iframe>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">金流量付费进群系统</div>
+            <div class="subtitle">演示平台 · 点击体验</div>
+        </header>
+
+        <div class="demo-section">
+            <div class="section-title">
+                <i>📚</i> 精选演示
+            </div>
+            <div class="link-list">
+                <!-- 演示链接1 -->
+                <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=mtPkGzDj">
+                    <div class="link-icon">🔥</div>
+                    <div class="link-content">
+                        <div class="link-title">天涯神贴演示 - 商户收款</div>
+                        <div class="link-desc">经典网络神贴合集，全网热议内容</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+
+                <!-- 演示链接2 -->
+                <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=2x94Phir">
+                    <div class="link-icon">🎬</div>
+                    <div class="link-content">
+                        <div class="link-title">纪录片演示 - 商户收款</div>
+                        <div class="link-desc">高清正版纪录片，涵盖历史、自然、科技等</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+
+                <!-- 演示链接3 -->
+                <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=IpX3LzbZ">
+                    <div class="link-icon">👥</div>
+                    <div class="link-content">
+                        <div class="link-title">搭子交友演示 - 商户收款</div>
+                        <div class="link-desc">寻找兴趣相投的伙伴，一起玩耍学习</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+
+                <!-- 演示链接4 -->
+                <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=rMrSeiJw">
+                    <div class="link-icon">📖</div>
+                    <div class="link-content">
+                        <div class="link-title">写真演示 - 个人微信/支付宝收款</div>
+                        <div class="link-desc">写真演示</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+                <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=jPc4XgqA">
+                    <div class="link-icon">📖</div>
+                    <div class="link-content">
+                        <div class="link-title">一页多群演示 · 带定位</div>
+                        <div class="link-desc">一页多群演示 · 带定位</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+                 <div class="link-item" data-url="https://jinliul.chuangkeba.cn/?c=tYfYjSMp">
+                    <div class="link-icon">✅</div>
+                    <div class="link-content">
+                        <div class="link-title">微信群页面</div>
+                        <div class="link-desc">微信群页面</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="section-title">
+                <i>💻</i> 系统后台演示
+            </div>
+            <div class="login-demo">
+                <div class="login-title">
+                    <i>✨</i> 金流量系统后台演示通道
+                </div>
+                <div class="login-info">
+                    <div class="login-info-item">
+                        <div class="login-label">🌐 登录地址：</div>
+                        <a class="link-item" href="http://ys.n-saas.cn/" style="display: inline-block; padding: 0; background: transparent; box-shadow: none;">
+                            <span class="login-value"> http://ys.n-saas.cn/</span>
+                        </a>
+                    </div>
+                    <div class="login-info-item">
+                        <div class="login-label">🔑 演示账号：</div>
+                        <div class="login-value">ys001</div>
+                    </div>
+                    <div class="login-info-item">
+                        <div class="login-label">🔒 密码：</div>
+                        <div class="login-value">123456</div>
+                    </div>
+                </div>
+                <div class="login-tip">
+                    ⚠️ 温馨提示：请勿修改演示账号配置
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 金流量系统 版权所有 </p>
+            <div>浙ICP备2025146132号-3</div>
+        </footer>
+    </div>
+
+    <script>
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loader').classList.add('hidden');
+            }, 800);
+        });
+
+        // iframe控制
+        const iframeContainer = document.getElementById('iframe-container');
+        const iframeContent = document.getElementById('iframe-content');
+        const iframeClose = document.getElementById('iframe-close');
+        
+        // 打开iframe
+        function openIframe(url) {
+            iframeContent.src = url;
+            iframeContainer.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 关闭iframe
+        iframeClose.addEventListener('click', function() {
+            iframeContainer.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            iframeContent.src = '';
+        });
+
+        // 点击跳转功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const linkItems = document.querySelectorAll('.link-item');
+            
+            // 为每个链接项添加点击事件
+            linkItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const url = this.getAttribute('data-url');
+                    if (!url) return;
+                    
+                    // 创建波纹效果
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    this.appendChild(ripple);
+                    
+                    // 设置波纹位置
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+                    ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+                    
+                    // 打开iframe
+                    setTimeout(() => {
+                        openIframe(url);
+                    }, 300);
+                    
+                    // 移除波纹元素
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // 交错动画效果
+            const linkListItems = document.querySelectorAll('.link-item');
+            linkListItems.forEach((item, index) => {
+                item.style.animation = `slideInLeft 0.5s ease-out ${index * 0.1 + 0.3}s both`;
+            });
+        });
+    </script>
+</body>
+</html>
